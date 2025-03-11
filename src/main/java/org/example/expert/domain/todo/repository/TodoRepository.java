@@ -7,15 +7,51 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 public interface TodoRepository extends JpaRepository<Todo, Long> {
-
-    @Query("SELECT t FROM Todo t LEFT JOIN FETCH t.user u ORDER BY t.modifiedAt DESC")
-    Page<Todo> findAllByOrderByModifiedAtDesc(Pageable pageable);
 
     @Query("SELECT t FROM Todo t " +
             "LEFT JOIN t.user " +
             "WHERE t.id = :todoId")
     Optional<Todo> findByIdWithUser(@Param("todoId") Long todoId);
+
+    @Query("SELECT t FROM Todo t LEFT JOIN FETCH t.user u " +
+            "WHERE FUNCTION('DATE', t.modifiedAt) <= :endAt " +
+            "ORDER BY t.modifiedAt DESC")
+    Page<Todo> findAllByOrderByModifiedAtDesc(
+            @Param("endAt") LocalDate endAt,
+            Pageable pageable
+    );
+
+    @Query("SELECT t FROM Todo t LEFT JOIN FETCH t.user u " +
+            "WHERE FUNCTION('DATE', t.modifiedAt) <= :endAt " +
+            "AND t.weather = :weather " +
+            "ORDER BY t.modifiedAt DESC")
+    Page<Todo> findAllByWeather(
+            @Param("weather") String weather,
+            @Param("endAt") LocalDate endAt,
+            Pageable pageable
+    );
+
+    @Query("SELECT t FROM Todo t LEFT JOIN FETCH t.user u " +
+            "WHERE FUNCTION('DATE', t.modifiedAt) BETWEEN :startAt AND :endAt " +
+            "ORDER BY t.modifiedAt DESC")
+    Page<Todo> findAllByDate(
+            @Param("startAt") LocalDate startAt,
+            @Param("endAt") LocalDate endAt,
+            Pageable pageable
+    );
+
+    @Query("SELECT t FROM Todo t LEFT JOIN FETCH t.user u " +
+            "WHERE FUNCTION('DATE', t.modifiedAt) BETWEEN :startAt AND :endAt " +
+            "AND t.weather = :weather " +
+            "ORDER BY t.modifiedAt DESC")
+    Page<Todo> findAllByWeatherAndDate(
+            @Param("weather") String weather,
+            @Param("startAt") LocalDate startAt,
+            @Param("endAt") LocalDate endAt,
+            Pageable pageable
+    );
 }
