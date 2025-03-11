@@ -1,6 +1,7 @@
 package org.example.expert.domain.todo.service;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.example.expert.client.WeatherClient;
 import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.common.exception.InvalidRequestException;
@@ -16,6 +17,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -48,10 +51,25 @@ public class TodoService {
         );
     }
 
-    public Page<TodoResponse> getTodos(int page, int size) {
+    public Page<TodoResponse> getTodos(String weather, LocalDate startAt, LocalDate endAt, int page, int size) {
+
         Pageable pageable = PageRequest.of(page - 1, size);
 
-        Page<Todo> todos = todoRepository.findAllByOrderByModifiedAtDesc(pageable);
+        if (endAt == null) {    // endAt은 무조건 존재함
+            endAt = LocalDate.now();
+        }
+
+        Page<Todo> todos;
+
+        if (weather == null && startAt == null) {       // 전체 검색
+            todos = todoRepository.findAllByOrderByModifiedAtDesc(endAt, pageable);
+        } else if (weather != null && startAt == null) {       // 날씨 조건 혹은 endAt으로 조회
+            todos = todoRepository.findAllByWeather(weather, endAt, pageable);
+        } else if (weather == null) {       // 날짜 조건으로 검색
+            todos = todoRepository.findAllByDate(startAt, endAt, pageable);
+        } else {       // 날짜와 날씨 조건으로 검색
+            todos = todoRepository.findAllByWeatherAndDate(weather, startAt, endAt, pageable);
+        }
 
         return todos.map(todo -> new TodoResponse(
                 todo.getId(),
