@@ -1,7 +1,6 @@
 package org.example.expert.config;
 
 import lombok.RequiredArgsConstructor;
-import org.example.expert.domain.user.enums.UserRole;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -42,8 +41,8 @@ public class SecurityConfig {
                 .rememberMe(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(request -> request.getRequestURI().startsWith("/auth")).permitAll()
-                        .requestMatchers("/test").hasAuthority(UserRole.Authority.ADMIN)
-                        .requestMatchers("/open").permitAll()
+//                        .requestMatchers("/test").hasAuthority(UserRole.Authority.ADMIN)
+//                        .requestMatchers("/open").permitAll()
                         .anyRequest().authenticated()
                 )
                 .build();
