@@ -1,5 +1,6 @@
 package org.example.expert.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -13,11 +14,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.user.enums.UserRole;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 @Slf4j
 @Component
@@ -48,6 +51,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             } catch (ExpiredJwtException e) {
                 log.error("Expired JWT token, 만료된 JWT token 입니다.", e);
                 httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "만료된 JWT 토큰입니다.");
+//                httpResponse.setContentType("application/json");
+//                httpResponse.setStatus(401);
+//                httpResponse.setCharacterEncoding("UTF-8");
+//                HashMap<String, String> map = new HashMap<>();
+//                map.put("code", String.valueOf(HttpStatus.UNAUTHORIZED.value()));
+//                map.put("message", "만료된 JWT 토큰입니다.");
+//                httpResponse.getWriter().write(new ObjectMapper().writeValueAsString(map));
+//                return;
             } catch (UnsupportedJwtException e) {
                 log.error("Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다.", e);
                 httpResponse.sendError(HttpServletResponse.SC_BAD_REQUEST, "지원되지 않는 JWT 토큰입니다.");
