@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.expert.domain.common.exception.InvalidRequestException;
 
 import java.util.Arrays;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 @Getter
 @RequiredArgsConstructor
@@ -17,7 +19,7 @@ public enum UserRole {
 
     public static UserRole of(String role) {
         return Arrays.stream(UserRole.values())
-                .filter(r -> r.name().equalsIgnoreCase(role))
+                .filter(r -> r.getUserRole().equalsIgnoreCase(role))
                 .findFirst()
                 .orElseThrow(() -> new InvalidRequestException("유효하지 않은 UserRole"));
     }
