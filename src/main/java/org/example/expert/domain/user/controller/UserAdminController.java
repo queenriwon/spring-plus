@@ -18,7 +18,9 @@ public class UserAdminController {
 
     @Secured(UserRole.Authority.ADMIN)
     @PatchMapping("/admin/users/{userId}")
-    public void changeUserRole(@PathVariable long userId, @RequestBody UserRoleChangeRequest userRoleChangeRequest) {
+    public void changeUserRole(
+            @PathVariable long userId,
+            @RequestBody UserRoleChangeRequest userRoleChangeRequest) {
         userAdminService.changeUserRole(userId, userRoleChangeRequest);
     }
 }
