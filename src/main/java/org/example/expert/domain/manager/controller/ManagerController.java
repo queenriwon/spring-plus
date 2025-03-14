@@ -1,5 +1,6 @@
 package org.example.expert.domain.manager.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.expert.domain.common.annotation.Auth;
@@ -25,7 +26,7 @@ public class ManagerController {
             @AuthenticationPrincipal AuthUser authUser,
             @PathVariable long todoId,
             @Valid @RequestBody ManagerSaveRequest managerSaveRequest
-    ) {
+    ) throws JsonProcessingException {
         return ResponseEntity.ok(managerService.saveManager(authUser, todoId, managerSaveRequest));
     }
 
