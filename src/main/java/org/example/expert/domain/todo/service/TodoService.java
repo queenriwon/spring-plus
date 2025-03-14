@@ -1,11 +1,11 @@
 package org.example.expert.domain.todo.service;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.example.expert.client.WeatherClient;
 import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.common.exception.InvalidRequestException;
 import org.example.expert.domain.todo.dto.request.TodoSaveRequest;
+import org.example.expert.domain.todo.dto.response.TodoGetResponse;
 import org.example.expert.domain.todo.dto.response.TodoResponse;
 import org.example.expert.domain.todo.dto.response.TodoSaveResponse;
 import org.example.expert.domain.todo.entity.Todo;
@@ -97,5 +97,11 @@ public class TodoService {
                 todo.getCreatedAt(),
                 todo.getModifiedAt()
         );
+    }
+
+    public Page<TodoGetResponse> searchTodos(String title, LocalDate startAt, LocalDate endAt, String managerName, int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        return todoRepository.findByTitleOrCreatedAtOrManager(title, startAt, endAt, managerName, pageable);
     }
 }
