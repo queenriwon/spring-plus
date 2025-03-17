@@ -2,6 +2,7 @@ package org.example.expert.domain.todo.repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -57,25 +58,55 @@ public class TodoQueryDslRepositoryImpl implements TodoQueryDslRepository{
         }
 
         if (managerName != null) {
-            builder.and(manager.user.nickname.contains(managerName));
+            builder.and(
+                    JPAExpressions.selectOne()
+                            .from(manager)
+                            .where(
+                                    manager.todo.id.eq(todo.id),
+                                    manager.user.nickname.contains(managerName)
+                            )
+                            .exists()
+            );
         }
 
+        // 1. group by 사용
+//        List<TodoGetResponse> todoGetResponseList = jpaQueryFactory
+//                .select(
+//                        Projections.constructor(
+//                                TodoGetResponse.class,
+//                                todo.title,
+//                                manager.countDistinct(),
+//                                comment.countDistinct()
+//                        )
+//                )
+//                .from(todo)
+//                .leftJoin(manager).on(manager.todo.id.eq(todo.id))      // fetchJoin(): 프로젝션 x
+//                .leftJoin(comment).on(comment.todo.id.eq(todo.id))
+//                .where(builder)
+//                .groupBy(todo.id, todo.title)
+//                .orderBy(todo.createdAt.desc())
+//                .offset(pageable.getOffset()).limit(pageable.getPageSize())
+//                .fetch();
+
+        // 2. 서브쿼리 사용 (groupby 및 join 생략 가능)
         List<TodoGetResponse> todoGetResponseList = jpaQueryFactory
                 .select(
                         Projections.constructor(
                                 TodoGetResponse.class,
                                 todo.title,
-                                manager.countDistinct(),
-                                comment.countDistinct()
+                                JPAExpressions.select(manager.countDistinct())
+                                        .from(manager)
+                                        .where(manager.todo.id.eq(todo.id)),
+                                JPAExpressions.select(comment.countDistinct())
+                                        .from(comment)
+                                        .where(comment.todo.id.eq(todo.id))
                         )
                 )
                 .from(todo)
-                .leftJoin(manager).on(manager.todo.id.eq(todo.id))      // fetchJoin(): 프로젝션 x
-                .leftJoin(comment).on(comment.todo.id.eq(todo.id))
                 .where(builder)
-                .groupBy(todo.id, todo.title)
                 .orderBy(todo.createdAt.desc())
-                .offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
+                .offset(pageable.getOffset()).limit(pageable.getPageSize())
+                .fetch();
 
         JPAQuery<Long> countQuery = jpaQueryFactory
                 .select(todo.count())
