@@ -23,11 +23,4 @@ public class AuthUser {
         this.authorities = List.of(new SimpleGrantedAuthority(role.name()));
     }
 
-    public UserRole getUserRole() {
-        return authorities.stream()
-                .map(GrantedAuthority::getAuthority)
-                .map(UserRole::valueOf)
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("No role found"));
-    }
 }

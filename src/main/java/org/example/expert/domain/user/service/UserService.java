@@ -1,8 +1,11 @@
 package org.example.expert.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.common.exception.InvalidRequestException;
 import org.example.expert.domain.user.dto.request.UserChangePasswordRequest;
+import org.example.expert.domain.user.dto.request.UserProfileImageRequest;
+import org.example.expert.domain.user.dto.response.UserProfileResponse;
 import org.example.expert.domain.user.dto.response.UserResponse;
 import org.example.expert.domain.user.entity.User;
 import org.example.expert.domain.user.repository.UserRepository;
@@ -47,5 +50,12 @@ public class UserService {
                 !userChangePasswordRequest.getNewPassword().matches(".*[A-Z].*")) {
             throw new InvalidRequestException("새 비밀번호는 8자 이상이어야 하고, 숫자와 대문자를 포함해야 합니다.");
         }
+    }
+
+    @Transactional
+    public UserProfileResponse updateProfileImage(AuthUser authUser, UserProfileImageRequest userProfileImageRequest) {
+        User user = userRepository.findById(authUser.getUserId()).orElseThrow(() -> new InvalidRequestException("User not found"));
+        user.updateProfileImageUrl(userProfileImageRequest.getProfileImageUrl());
+        return new UserProfileResponse(user.getId(), user.getEmail(), user.getNickname(), user.getProfileImageUrl());
     }
 }

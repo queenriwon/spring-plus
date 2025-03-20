@@ -1,9 +1,10 @@
 package org.example.expert.domain.user.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.expert.domain.common.annotation.Auth;
 import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.user.dto.request.UserChangePasswordRequest;
+import org.example.expert.domain.user.dto.request.UserProfileImageRequest;
+import org.example.expert.domain.user.dto.response.UserProfileResponse;
 import org.example.expert.domain.user.dto.response.UserResponse;
 import org.example.expert.domain.user.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +22,16 @@ public class UserController {
         return ResponseEntity.ok(userService.getUser(userId));
     }
 
-    @PutMapping("/users")
+    @PatchMapping("/users/password")
     public void changePassword(@AuthenticationPrincipal AuthUser authUser, @RequestBody UserChangePasswordRequest userChangePasswordRequest) {
         userService.changePassword(authUser.getUserId(), userChangePasswordRequest);
+    }
+
+    @PatchMapping("/users/profile-image")
+    public ResponseEntity<UserProfileResponse> updateProfileImage(
+            @AuthenticationPrincipal AuthUser authUser,
+            @RequestBody UserProfileImageRequest userProfileImageRequest
+    ) {
+        return ResponseEntity.ok(userService.updateProfileImage(authUser, userProfileImageRequest));
     }
 }

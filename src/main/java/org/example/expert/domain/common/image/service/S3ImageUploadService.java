@@ -17,7 +17,7 @@ import java.util.UUID;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class S3Service {
+public class S3ImageUploadService implements ImageService {
 
     private static final long MAX_FILE_SIZE = 5 * 1024 * 1024;
     private final S3Client s3Client;
