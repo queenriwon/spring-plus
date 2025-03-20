@@ -1,0 +1,28 @@
+spring:
+  config:
+    activate:
+      on-profile: "prod-database"
+  application:
+    name: expert
+  datasource:
+    url: jdbc:mysql://${RDS_HOST}:3306/expert
+    username: ${RDS_USERNAME}
+    password: ${RDS_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+---
+spring:
+  config:
+    activate:
+      on-profile: "local-prod-s3"
+  cloud:
+    aws:
+      credentials:
+        access-key: ${ACCESS_KEY}
+        secret-key: ${SECRET_KEY}
+      s3:
+        bucket: ${BUCHET_NAME}
+      region:
+        static: ${REGION_VALUE}
+      stack:
+        auto: false
