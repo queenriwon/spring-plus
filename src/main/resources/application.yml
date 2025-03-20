@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: expert
+  profiles:
+    group:
+      local:
+        - "local-database"
+        - "local-prod-s3"
+      prod:
+        - "prod-database"
+        - "local-prod-s3"
+    active: prod
+  config:
+    import:
+      - classpath:application-aws.yml
+      - classpath:application-local.yml
