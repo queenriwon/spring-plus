@@ -48,8 +48,15 @@
 
 <img width="1171" alt="Pasted Graphic 6" src="https://github.com/user-attachments/assets/51b22ff1-b019-4236-b5da-b8ddb26197fa" />
 
+<br>
 
+#### 성능 개선
+<img width="847" alt="Pasted Graphic" src="https://github.com/user-attachments/assets/cadb0993-ac0f-48f0-83e8-05c34ec8b48e" />
+<img width="1094" alt="Pasted Graphic 3" src="https://github.com/user-attachments/assets/04de7f10-94a9-4c7d-aeba-b69aaedab28d" />
 
+성능 개선 전: 검색 289~400 ms
 
+<img width="835" alt="Pasted Graphic 1" src="https://github.com/user-attachments/assets/eca8d152-fa8f-4f45-8697-6262073411bb" />
+<img width="1090" alt="Pasted Graphic 2" src="https://github.com/user-attachments/assets/6309c938-d0dd-4d3f-b223-2dcb16503e6f" />
 
-
+성능 개선 후: 검색 23 ms
