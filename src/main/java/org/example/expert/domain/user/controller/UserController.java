@@ -7,6 +7,9 @@ import org.example.expert.domain.user.dto.request.UserProfileImageRequest;
 import org.example.expert.domain.user.dto.response.UserProfileResponse;
 import org.example.expert.domain.user.dto.response.UserResponse;
 import org.example.expert.domain.user.service.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -33,5 +36,13 @@ public class UserController {
             @RequestBody UserProfileImageRequest userProfileImageRequest
     ) {
         return ResponseEntity.ok(userService.updateProfileImage(authUser, userProfileImageRequest));
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<Page<UserResponse>> getUsers(
+            @RequestParam String nickname,
+            Pageable pageable
+    ) {
+        return ResponseEntity.ok(userService.getUsers(nickname, pageable));
     }
 }
