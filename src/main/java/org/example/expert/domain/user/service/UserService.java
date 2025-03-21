@@ -9,6 +9,8 @@ import org.example.expert.domain.user.dto.response.UserProfileResponse;
 import org.example.expert.domain.user.dto.response.UserResponse;
 import org.example.expert.domain.user.entity.User;
 import org.example.expert.domain.user.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,5 +59,9 @@ public class UserService {
         User user = userRepository.findById(authUser.getUserId()).orElseThrow(() -> new InvalidRequestException("User not found"));
         user.updateProfileImageUrl(userProfileImageRequest.getProfileImageUrl());
         return new UserProfileResponse(user.getId(), user.getEmail(), user.getNickname(), user.getProfileImageUrl());
+    }
+
+    public Page<UserResponse> getUsers(String nickname, Pageable pageable) {
+        return userRepository.findByNickname(nickname, pageable);
     }
 }
