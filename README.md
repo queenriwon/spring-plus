@@ -31,3 +31,25 @@
 (구현 후 인스턴스 삭제 완료)
 <img width="1118" alt="Pasted Graphic 32" src="https://github.com/user-attachments/assets/c05fdb05-ba92-4e8d-96e7-9af960810e2f" />
 
+<br>
+
+#### RDS
+
+<img width="329" alt="Database" src="https://github.com/user-attachments/assets/0678cc44-f230-402d-b975-af4deb2cc6cf" />
+
+
+<br>
+
+#### S3
+
+<img width="843" alt="Pasted Graphic 5" src="https://github.com/user-attachments/assets/c9495221-1cca-4572-b431-09487d373617" />
+
+<img width="843" alt="Pasted Graphic 4" src="https://github.com/user-attachments/assets/4a9dd16e-05cf-4d50-ab2c-16658a4b5560" />
+
+<img width="1171" alt="Pasted Graphic 6" src="https://github.com/user-attachments/assets/51b22ff1-b019-4236-b5da-b8ddb26197fa" />
+
+
+
+
+
+
